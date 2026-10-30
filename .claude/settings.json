@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(make:*)",
+      "Bash(tools/godot.sh:*)",
+      "Bash(tools/smoke.sh:*)",
+      "Bash(./tools/godot.sh:*)",
+      "Bash(./tools/smoke.sh:*)",
+      "Bash(uvx --from gdtoolkit==4.5.0:*)"
+    ]
+  }
+}

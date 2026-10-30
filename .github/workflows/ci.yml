@@ -1,0 +1,58 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+
+      - name: Cache Godot
+        uses: actions/cache@v4
+        with:
+          path: .godot-bin
+          key: godot-${{ runner.os }}-${{ hashFiles('.godot-version') }}
+
+      - name: Install Godot
+        run: tools/install-godot.sh
+
+      - name: Lint
+        run: make lint format-check
+
+      - name: Test
+        run: make test
+
+      - name: Smoke
+        run: make smoke
+
+  export-web:
+    needs: check
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Godot + templates
+        uses: actions/cache@v4
+        with:
+          path: |
+            .godot-bin
+            ~/.local/share/godot/export_templates
+          key: godot-templates-${{ runner.os }}-${{ hashFiles('.godot-version') }}
+
+      - name: Install Godot + export templates
+        run: tools/install-godot.sh --templates
+
+      - name: Export Web
+        run: make export-web
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: build/web

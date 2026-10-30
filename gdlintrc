@@ -1,0 +1,10 @@
+# gdlint configuration. Defaults: https://github.com/Scony/godot-gdscript-toolkit/wiki/3.-Linter
+max-line-length: 100
+max-file-lines: 1000
+max-public-methods: 30
+function-arguments-number: 8
+excluded_directories: !!set
+  .git: null
+  .godot: null
+  .godot-bin: null
+  addons: null
